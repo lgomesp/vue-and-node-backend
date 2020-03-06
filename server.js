@@ -8,8 +8,8 @@ const port = 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
-var messages = [{user: "Jim", text: "hello"}, {user: "Jim", text: "hi"}];
-var users = [{userName: "Jim", userPassword: "1"}];
+var messages = [{user: "lu", text: "hello"}, {user: "lu", text: "hi"}];
+var users = [{userName: "lu", userPassword: "1"}];
 
 app.get('/messages', (req, res) => {
     res.send(messages);
@@ -35,7 +35,7 @@ app.post('/register', (req, res) => {
 
     let token = jwt.sign(userId, '123');
 
-    res.json(token);
+    res.json({user: registerData.userName, token});
 });
 
 app.post('/login', (req, res) => {
@@ -44,14 +44,14 @@ app.post('/login', (req, res) => {
     let userId = users.findIndex(user => user.userName == loginData.userName);
 
     if (userId == -1)
-        return res.status(401).send({message: 'name or password is invalid!'})
+        return res.status(401).send({message: 'User Name or Password is invalid!'})
 
     if (users[userId].userPassword != loginData.userPassword)
-        return res.status(401).send({message: 'name or password is invalid!'})
+        return res.status(401).send({message: 'User Name or Password is invalid!'})
 
     let token = jwt.sign(userId, '123');
 
-    res.json(token);
+    res.json({user: users[userId].userName, token});
 });
 
 app.listen(port, () => console.log('app running'));
